@@ -51,7 +51,7 @@ public class DinnerController {
     public ResponseEntity<Dinner> getSlowDinner() {
         log.warn("Getting slow dinner");
         try {
-            Thread.sleep(new Random().nextInt(5000));
+            Thread.sleep(new Random().nextInt(3000));
         } catch (InterruptedException e) {
             log.error("Something happened while getting a slow dinner", e);
         }
@@ -59,7 +59,7 @@ public class DinnerController {
         return getRandomDinner();
     }
 
-    @GetMapping(value = "/error")
+    @GetMapping(value = "/bad")
     public ResponseEntity<Dinner> getBadDinner() {
         log.error("Getting a bad dinner");
         return ResponseEntity.internalServerError().build();
@@ -69,16 +69,16 @@ public class DinnerController {
     public ResponseEntity<Dinner> getDinnerIfYourLucky() {
         log.info("Try my luck at getting a dinner...");
         Random random = new Random();
-        int number = random.nextInt(100) + 1;
-        if (number <= dinnerProperties.getUnreliableDinnerSuccessRate()) {
-            return random.nextInt(3) < 2
+        int number = random.nextInt(100);
+        if (number < dinnerProperties.getUnreliableDinnerSuccessRate()) {
+            return random.nextInt(3) > 2
                     ? getSlowDinner()
                     : getRandomDinner();
         }
-        if (random.nextInt(10) < 9) {
-            return getBadDinner();
+        if (random.nextInt(10) > 8) {
+            log.info("...sorry, Mac - no dinner today");
+            return ResponseEntity.notFound().build();
         }
-        log.info("...sorry, Mac - no dinner today");
-        return ResponseEntity.notFound().build();
+        return getBadDinner();
     }
 }
