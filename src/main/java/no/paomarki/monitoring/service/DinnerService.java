@@ -1,5 +1,7 @@
 package no.paomarki.monitoring.service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import no.paomarki.monitoring.model.Dinner;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +11,15 @@ import java.util.*;
 public class DinnerService {
 
     private final List<Dinner> dinners;
+    private final MeterRegistry meterRegistry;
+    Counter dinnersSinceLastRestart;
 
-    public DinnerService() {
+    public DinnerService(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+        this.dinnersSinceLastRestart = Counter.builder("dinner.meals.served")
+                .description("Dinners served since last restart")
+                //.tags()
+                .register(this.meterRegistry);
         dinners = Collections.unmodifiableList(new ArrayList<>() {{
             add(new Dinner("pizza", List.of("pizza base", "tomatoes", "topping", "cheese")));
             add(new Dinner("okonomiyaki", List.of("pancake dough", "cabbage", "bacon", "mayonnaise", "sauce")));
@@ -37,6 +46,7 @@ public class DinnerService {
 
     public Dinner getRandomDinner() {
         Random random = new Random();
+        dinnersSinceLastRestart.increment();
         return dinners.get(random.nextInt(dinners.size()));
     }
 }
