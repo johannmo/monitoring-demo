@@ -27,11 +27,13 @@ public class DinnerController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Dinner> getDinners() {
+        log.info("Getting all dinners");
         return dinnerService.getDinners();
     }
 
     @GetMapping(value = "/{name}")
     public ResponseEntity<Dinner> getDinner(@PathVariable String name) {
+        log.info("Looks for dinner with name '{}'", name);
         Optional<Dinner> match = dinnerService.getDinner(name);
         return match.isPresent()
                 ? ResponseEntity.of(match)
@@ -40,12 +42,14 @@ public class DinnerController {
 
     @GetMapping(value = "/random")
     public ResponseEntity<Dinner> getRandomDinner() {
+        log.info("Getting random dinner");
         Optional<Dinner> dinner = Optional.of(dinnerService.getRandomDinner());
         return ResponseEntity.of(dinner);
     }
 
     @GetMapping(value = "/slow")
     public ResponseEntity<Dinner> getSlowDinner() {
+        log.warn("Getting slow dinner");
         try {
             Thread.sleep(new Random().nextInt(5000));
         } catch (InterruptedException e) {
@@ -57,11 +61,13 @@ public class DinnerController {
 
     @GetMapping(value = "/error")
     public ResponseEntity<Dinner> getBadDinner() {
+        log.error("Getting a bad dinner");
         return ResponseEntity.internalServerError().build();
     }
 
     @GetMapping(value = "/unreliable")
     public ResponseEntity<Dinner> getDinnerIfYourLucky() {
+        log.info("Try my luck at getting a dinner...");
         Random random = new Random();
         int number = random.nextInt(100) + 1;
         if (number <= dinnerProperties.getUnreliableDinnerSuccessRate()) {
@@ -72,6 +78,7 @@ public class DinnerController {
         if (random.nextInt(10) < 9) {
             return getBadDinner();
         }
+        log.info("...sorry, Mac - no dinner today");
         return ResponseEntity.notFound().build();
     }
 }
