@@ -81,4 +81,19 @@ public class DinnerController {
         }
         return getBadDinner();
     }
+
+    @GetMapping(value = "/queue")
+    public ResponseEntity<?> addGuestToQueue() {
+        dinnerService.addWaitingGuest();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/dequeue")
+    public ResponseEntity<?> removeGuestFromQueue() {
+        return dinnerService.removeWaitingGuest()
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
+
+    }
+
 }
