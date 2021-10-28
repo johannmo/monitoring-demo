@@ -5,7 +5,6 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import no.paomarki.monitoring.model.Dinner;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,14 +15,15 @@ public class DinnerService {
 
     private final List<Dinner> dinners;
     private final MeterRegistry meterRegistry;
+    private final List<String> waitingGuests = new ArrayList<>(0);
+    private final Gauge queueSize;
+    private final Counter dinnersSinceLastRestart;
 
-    private List<String> waitingGuests = new ArrayList<>(0);
-    private Gauge queueSize;
+    private final IdentifierService identifierService;
 
-    private Counter dinnersSinceLastRestart;
-
-    public DinnerService(MeterRegistry meterRegistry) {
+    public DinnerService(MeterRegistry meterRegistry, IdentifierService identifierService) {
         this.meterRegistry = meterRegistry;
+        this.identifierService = identifierService;
         this.dinnersSinceLastRestart = Counter.builder("dinner.meals.served")
                 .description("Dinners served since last restart")
                 .register(this.meterRegistry);
@@ -60,16 +60,16 @@ public class DinnerService {
     }
 
     public void addWaitingGuest() {
-        String name = RandomStringUtils.randomAlphabetic(10);
-        waitingGuests.add(name);
-        log.info("Added {} to dinner queue", name);
+        String identifier = identifierService.getIdentifier();
+        waitingGuests.add(identifier);
+        log.info("Added {} to dinner queue", identifier);
     }
 
     public boolean removeWaitingGuest() {
         if (waitingGuests.size() > 0) {
-            String name = waitingGuests.get(0);
+            String identifier = waitingGuests.get(0);
             waitingGuests.remove(0);
-            log.info("Removed {} from dinner queue", name);
+            log.info("Removed {} from dinner queue", identifier);
             return true;
         }
         return false;

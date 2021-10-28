@@ -1,5 +1,6 @@
 dinner:
   unreliable-dinner-success-rate: 95
+  identifier-service-url: "http://localhost:8081"
 management:
   endpoints:
     web:
