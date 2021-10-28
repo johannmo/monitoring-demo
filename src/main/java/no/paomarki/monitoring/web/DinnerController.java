@@ -67,11 +67,11 @@ public class DinnerController {
 
     @GetMapping(value = "/unreliable")
     public ResponseEntity<Dinner> getDinnerIfYourLucky() {
-        log.info("Try my luck at getting a dinner...");
+        log.info("Trying my luck at getting a dinner...");
         Random random = new Random();
         int number = random.nextInt(100);
         if (number < dinnerProperties.getUnreliableDinnerSuccessRate()) {
-            return random.nextInt(3) > 2
+            return random.nextInt(4) > 2
                     ? getSlowDinner()
                     : getRandomDinner();
         }

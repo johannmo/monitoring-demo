@@ -6,8 +6,5 @@ management:
       exposure:
         include: health,env,metrics,prometheus
   metrics:
-    distribution:
-      percentiles-histogram:
-        http.server.requests: true
     tags:
       application: "monitoring-demo"
