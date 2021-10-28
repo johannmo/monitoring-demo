@@ -6,5 +6,10 @@ management:
       exposure:
         include: health,env,metrics,prometheus
   metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 50ms,100ms,300ms,500ms,1000ms,1500ms,2000ms
     tags:
       application: "monitoring-demo"
