@@ -9,7 +9,9 @@ management:
     distribution:
       percentiles-histogram:
         http.server.requests: true
+        dinner.duration: true
       slo:
         http.server.requests: 50ms,100ms,300ms,500ms,1000ms,1500ms,2000ms
+        dinner.duration: 1s,2s,3s,4s,5s
     tags:
       application: "monitoring-demo"

@@ -1,5 +1,7 @@
 package no.paomarki.monitoring.web;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.paomarki.monitoring.config.DinnerProperties;
@@ -24,6 +26,7 @@ public class DinnerController {
 
     private final DinnerProperties dinnerProperties;
     private final DinnerService dinnerService;
+    private final MeterRegistry meterRegistry;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Dinner> getDinners() {
@@ -96,4 +99,20 @@ public class DinnerController {
 
     }
 
+    @GetMapping(value = "/eat")
+    public ResponseEntity<?> eatDinner() {
+        log.info("Dinner is served!");
+        Timer dinnerDuration = Timer.builder("dinner.duration").register(meterRegistry);
+        dinnerDuration.record(() ->
+                {
+                    try {
+                        Thread.sleep(new Random().nextInt(5000));
+                    } catch (InterruptedException e) {
+                        log.error("Dinner was interrupted", e);
+                    }
+                }
+        );
+        log.info("Dinner is consumed.");
+        return ResponseEntity.ok().build();
+    }
 }
