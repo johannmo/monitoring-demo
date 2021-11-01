@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.net.URL;
 
 @Data
 @Validated
@@ -16,4 +15,6 @@ public class DinnerProperties {
 
     @NotNull
     private String identifierServiceUrl;
+
+    private String printReportCronExpression;
 }
