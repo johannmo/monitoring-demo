@@ -1,6 +1,7 @@
 dinner:
   unreliable-dinner-success-rate: 95
   identifier-service-url: "http://localhost:8081"
+  print-report-cron-expression: "0/30 * * * * ?"
 management:
   endpoints:
     web:

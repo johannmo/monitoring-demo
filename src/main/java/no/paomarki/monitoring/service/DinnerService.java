@@ -1,12 +1,15 @@
 package no.paomarki.monitoring.service;
 
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import no.paomarki.monitoring.model.Dinner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -73,5 +76,17 @@ public class DinnerService {
             return true;
         }
         return false;
+    }
+
+    @Timed(value = "dinner.report.generate", longTask = true)
+    @Scheduled(cron = "${dinner.print-report-cron-expression:-}")
+    public void PrintScheduledReport() throws InterruptedException {
+        Thread.sleep(30000);
+        System.out.println("---- Generating Report - " + LocalDateTime.now() + "----");
+        Thread.sleep(30000);
+        System.out.println("Dinners in menu: " + dinners.size());
+        Thread.sleep(30000);
+        System.out.println("Guests in queue: " + waitingGuests.size());
+        System.out.println("---- Report Generated - " + LocalDateTime.now() + "----");
     }
 }
