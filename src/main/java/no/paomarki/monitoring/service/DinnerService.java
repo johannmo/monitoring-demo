@@ -1,5 +1,6 @@
 package no.paomarki.monitoring.service;
 
+import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -77,6 +78,7 @@ public class DinnerService {
         return false;
     }
 
+    @Timed(value = "dinner.report.generate", longTask = true)
     @Scheduled(cron = "${dinner.print-report-cron-expression:-}")
     public void PrintScheduledReport() throws InterruptedException {
         Thread.sleep(30000);
