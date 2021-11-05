@@ -19,7 +19,6 @@ public class DinnerService {
     private final List<Dinner> dinners;
     private final MeterRegistry meterRegistry;
     private final List<String> waitingGuests = new ArrayList<>(0);
-    private final Gauge queueSize;
     private final Counter dinnersSinceLastRestart;
 
     private final IdentifierService identifierService;
@@ -42,7 +41,7 @@ public class DinnerService {
             add(new Dinner("fiskekling", List.of("fresh fish", "salt", "pepper", "flatbread", "sour cream")));
             add(new Dinner("pasta with chicken", List.of("pasta", "chicken thighs", "broccoli", "cheese", "Oslo sauce")));
         }});
-        this.queueSize = Gauge.builder("dinner.waiting.guests", waitingGuests, List::size)
+        Gauge queueSize = Gauge.builder("dinner.waiting.guests", waitingGuests, List::size)
                 .register(meterRegistry);
     }
 
