@@ -17,18 +17,16 @@ import java.util.*;
 public class DinnerService {
 
     private final List<Dinner> dinners;
-    private final MeterRegistry meterRegistry;
     private final List<String> waitingGuests = new ArrayList<>(0);
     private final Counter dinnersSinceLastRestart;
 
     private final IdentifierService identifierService;
 
     public DinnerService(MeterRegistry meterRegistry, IdentifierService identifierService) {
-        this.meterRegistry = meterRegistry;
         this.identifierService = identifierService;
         this.dinnersSinceLastRestart = Counter.builder("dinner.meals.served")
                 .description("Dinners served since last restart")
-                .register(this.meterRegistry);
+                .register(meterRegistry);
         dinners = Collections.unmodifiableList(new ArrayList<>() {{
             add(new Dinner("pizza", List.of("pizza base", "tomatoes", "topping", "cheese")));
             add(new Dinner("okonomiyaki", List.of("pancake dough", "cabbage", "bacon", "mayonnaise", "sauce")));
