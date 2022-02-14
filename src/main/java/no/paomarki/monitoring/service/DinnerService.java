@@ -30,8 +30,14 @@ public class DinnerService {
         dinners = Collections.unmodifiableList(new ArrayList<>() {{
             add(new Dinner("pizza", List.of("pizza base", "tomatoes", "topping", "cheese")));
             add(new Dinner("okonomiyaki", List.of("pancake dough", "cabbage", "bacon", "mayonnaise", "sauce")));
+            add(new Dinner("gyoza", List.of("gyoza dough", "chicken dough", "vegetables", "soy sauce")));
+            add(new Dinner("karaage", List.of("chicken", "ginger", "soy sauce", "salad")));
             add(new Dinner("fish soup", List.of("fish", "soup", "vegetables", "spices")));
+            add(new Dinner("bean soup", List.of("bean", "soup", "vegetables", "spices")));
             add(new Dinner("smalahove", List.of("smoked sheep head", "potatoes", "turnips")));
+            add(new Dinner("sushi", List.of("rice", "sashimi", "maki", "wasabi", "wakame", "nori")));
+            add(new Dinner("lutefisk", List.of("lutefisk", "potatoes", "bacon", "sennep sauce", "pea pure")));
+            add(new Dinner("lakabodl", List.of("bodl", "lake")));
             add(new Dinner("hamburger", List.of("bun", "burger", "salad", "sauce", "topping")));
             add(new Dinner("chili non carne", List.of("beans", "tomatoes", "chili", "chocolate", "peppers", "onion")));
             add(new Dinner("mushroom wraps", List.of("champignon", "tortilla", "salsa", "peppers", "onion", "avocado")));
